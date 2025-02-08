@@ -1,7 +1,7 @@
 # Site settings
 title:          Tale
 description:    "Minimal Jekyll theme for storytellers"
-baseurl:        "/"
+baseurl:        ""
 url:            "https://junuke.github.io"
 
 # Google Analytics
