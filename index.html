@@ -54,3 +54,41 @@ layout: default
     </span>
   {% endif %}
 </div>
+
+<style>
+.pagination {
+  display: none; /* 페이지네이션 숨기기 */
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let loading = false;
+  window.addEventListener("scroll", async () => {
+    const nextLink = document.querySelector(".pagination .next a");
+    if (!nextLink || loading) return;
+
+    // 스크롤이 페이지 하단 300px 근처까지 오면 로드
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+      loading = true;
+      const res = await fetch(nextLink.href);
+      const text = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, "text/html");
+
+      // 새 포스트만 추출
+      const newPosts = doc.querySelectorAll(".post");
+      newPosts.forEach((post) => {
+        document.querySelector(".posts").appendChild(post);
+      });
+
+      // 다음 페이지 갱신
+      const nextPage = doc.querySelector(".pagination");
+      document.querySelector(".pagination").innerHTML = nextPage ? nextPage.innerHTML : "";
+
+      loading = false;
+    }
+  });
+});
+</script>
+  
